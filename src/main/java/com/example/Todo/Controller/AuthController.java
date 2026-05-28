@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.ParameterScriptAssert;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/auth")
+@RequestMapping("/api/v1")
 @RestController
 public class AuthController {
     private  AuthService authService;
@@ -21,14 +21,14 @@ public class AuthController {
     public String hello(){
         return "Hello Richa !!";
     }
-    @PostMapping("/signup")
+    @PostMapping("/auth/signup")
     public ResponseEntity<?> authsignup(@RequestBody signupDto request)
     {
         String response=authService.signupService(request);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginDto request)
     {
         Loginresponse resposne = authService.loginService(request);
