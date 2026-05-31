@@ -1,5 +1,6 @@
 package com.example.Todo.Controller;
 
+import com.example.Todo.Dto.PaginatedTaskResponseDto;
 import com.example.Todo.Dto.TaskRequestDTO;
 import com.example.Todo.Dto.TaskResponseDto;
 import com.example.Todo.Dto.signupDto;
@@ -26,9 +27,9 @@ public class TaskContoller {
         return ResponseEntity.ok(response);
     }
    @GetMapping
-   public ResponseEntity<List<TaskResponseDto>> getAllTasks()
+   public ResponseEntity<PaginatedTaskResponseDto> getAllTasks( @RequestParam(defaultValue = "0") int page , @RequestParam(defaultValue = "5") int size)
    {
-       return ResponseEntity.ok(taskService.getAllTasks());
+       return ResponseEntity.ok(taskService.getAllTasks(page,size));
    }
 
    @GetMapping("{id}")

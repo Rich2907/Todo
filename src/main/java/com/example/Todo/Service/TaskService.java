@@ -1,5 +1,8 @@
 package com.example.Todo.Service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import com.example.Todo.Dto.PaginatedTaskResponseDto;
 import com.example.Todo.Dto.TaskRequestDTO;
 import com.example.Todo.Dto.TaskResponseDto;
 import com.example.Todo.Entity.Task;
@@ -7,6 +10,8 @@ import com.example.Todo.Exception.ResourceNotFoundException;
 import com.example.Todo.Repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -61,10 +66,11 @@ public class TaskService {
         return responseDTO;
     }
 
-    public List<TaskResponseDto> getAllTasks() {
-        List<Task> tasks = taskRepository.findAll();
+    public PaginatedTaskResponseDto getAllTasks(int page, int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        Page<Task> taskPage=taskRepository.findAll(pageable);
         List<TaskResponseDto> response = new ArrayList<>();
-        for (Task task : tasks) {
+        for (Task task : taskPage.getContent()) {
             TaskResponseDto dto = new TaskResponseDto();
             dto.setId((task.getId()));
             dto.setTitle(task.getTitle());
@@ -95,7 +101,18 @@ public class TaskService {
 
             response.add(dto);
         }
-        return response;
+        PaginatedTaskResponseDto Pageresponse =new PaginatedTaskResponseDto();
+        Pageresponse.setContent(response);
+//        Pageresponse.setCurrentPage(taskPage.getNumber());
+        Pageresponse.setCurrentPage(taskPage.getNumber());
+
+        Pageresponse.setTotalPages(taskPage.getTotalPages());
+
+        Pageresponse.setTotalElements(taskPage.getTotalElements());
+
+        return Pageresponse;
+
+
     }
     public TaskResponseDto gettaskByid( Long id )
     {
