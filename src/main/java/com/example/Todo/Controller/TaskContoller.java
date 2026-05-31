@@ -8,10 +8,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/api/v1/tasks")
 @RestController
@@ -20,10 +19,33 @@ public class TaskContoller {
 
     @Autowired
     private  final TaskService taskService;
-    @PostMapping("/createTask")
+    @PostMapping
     public ResponseEntity<?> createTask(@Valid @RequestBody TaskRequestDTO request)
     {
          TaskResponseDto response=taskService.createTask(request);
         return ResponseEntity.ok(response);
+    }
+   @GetMapping
+   public ResponseEntity<List<TaskResponseDto>> getAllTasks()
+   {
+       return ResponseEntity.ok(taskService.getAllTasks());
+   }
+
+   @GetMapping("{id}")
+    public ResponseEntity<?> getByid(@PathVariable("id") Long Taskid)
+   {
+       return ResponseEntity.ok(taskService.gettaskByid(Taskid));
+   }
+   @PutMapping("{id}")
+
+    public ResponseEntity<?>  updateTaskByid(@PathVariable("id") Long taskid,@RequestBody TaskRequestDTO request)
+   {
+       return ResponseEntity.ok(taskService.updateTaskById(taskid,request));
+   }
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable("id") Long Taskid)
+    {
+        taskService.deleteTaskByid(Taskid);
+        return ResponseEntity.ok("Deleted successfully");
     }
 }
