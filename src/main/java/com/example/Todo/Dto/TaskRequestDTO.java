@@ -1,7 +1,7 @@
 package com.example.Todo.Dto;
 
-import com.example.Todo.Enums.priority;
-import com.example.Todo.Enums.status;
+import com.example.Todo.Enums.Priority;
+import com.example.Todo.Enums.Status;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
@@ -28,10 +28,10 @@ public class TaskRequestDTO {
     private String description;
 
     @NotNull(message = "Status is required")
-    private status status;
+    private Status status;
 
     @NotNull(message = "Priority is required")
-    private priority priority;
+    private Priority priority;
 
     @Future(message = "Due date must be future date")
     private LocalDate dueDate;

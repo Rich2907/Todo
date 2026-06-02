@@ -4,6 +4,8 @@ import com.example.Todo.Dto.PaginatedTaskResponseDto;
 import com.example.Todo.Dto.TaskRequestDTO;
 import com.example.Todo.Dto.TaskResponseDto;
 import com.example.Todo.Dto.signupDto;
+import com.example.Todo.Enums.Priority;
+import com.example.Todo.Enums.Status;
 import com.example.Todo.Service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +29,9 @@ public class TaskContoller {
         return ResponseEntity.ok(response);
     }
    @GetMapping
-   public ResponseEntity<PaginatedTaskResponseDto> getAllTasks( @RequestParam(defaultValue = "0") int page , @RequestParam(defaultValue = "5") int size)
+   public ResponseEntity<PaginatedTaskResponseDto> getAllTasks(@RequestParam(defaultValue = "0") int page , @RequestParam(defaultValue = "5") int size,@RequestParam(required = false )Status status, @RequestParam(required = false )Priority priority,@RequestParam(required = false) String search)
    {
-       return ResponseEntity.ok(taskService.getAllTasks(page,size));
+       return ResponseEntity.ok(taskService.getAllTasks(page,size,status,priority,search));
    }
 
    @GetMapping("{id}")

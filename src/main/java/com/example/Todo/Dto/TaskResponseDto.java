@@ -1,7 +1,7 @@
 package com.example.Todo.Dto;
 
-import com.example.Todo.Enums.priority;
-import com.example.Todo.Enums.status;
+import com.example.Todo.Enums.Priority;
+import com.example.Todo.Enums.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,9 +21,9 @@ public class TaskResponseDto {
 
     private String description;
 
-    private status status;
+    private Status status;
 
-    private priority priority;
+    private Priority priority;
 
     private LocalDate dueDate;
 

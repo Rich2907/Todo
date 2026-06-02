@@ -1,6 +1,6 @@
 package com.example.Todo.Enums;
 
-public enum priority {
+public enum Priority {
 LOW,
     MEDIUM,
     HIGH

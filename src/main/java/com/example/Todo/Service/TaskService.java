@@ -1,4 +1,6 @@
 package com.example.Todo.Service;
+import com.example.Todo.Enums.Priority;
+import com.example.Todo.Enums.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
@@ -66,9 +68,26 @@ public class TaskService {
         return responseDTO;
     }
 
-    public PaginatedTaskResponseDto getAllTasks(int page, int size) {
+    public PaginatedTaskResponseDto getAllTasks(int page, int size, Status status, Priority priority, String search) {
         Pageable pageable= PageRequest.of(page, size);
-        Page<Task> taskPage=taskRepository.findAll(pageable);
+        Page<Task> taskPage;
+        if( status !=null)
+        {
+            System.out.println(status);
+            taskPage=taskRepository.findByStatus(status,pageable);
+        }
+        else if (priority != null)
+        {
+         taskPage=taskRepository.findByPriority(priority,pageable);
+        }
+        else if( search!=null && !search.isEmpty())
+        {
+            taskPage=taskRepository.findByTitleContainingIgnoreCase(search,pageable);
+        }
+        else {
+            taskPage = taskRepository.findAll(pageable);
+        }
+        System.out.println(status+" "+priority+" "+search);
         List<TaskResponseDto> response = new ArrayList<>();
         for (Task task : taskPage.getContent()) {
             TaskResponseDto dto = new TaskResponseDto();
@@ -84,6 +103,7 @@ public class TaskService {
             );
 
             dto.setPriority(
+
                     task.getPriority()
             );
 
@@ -150,6 +170,7 @@ public class TaskService {
     }
     public TaskResponseDto updateTaskById( Long id,TaskRequestDTO request ) {
         Task task= taskRepository.findById(id)
+
                 .orElseThrow(()-> new ResourceNotFoundException("Task not found"));
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());

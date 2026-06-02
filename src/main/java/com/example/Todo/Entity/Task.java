@@ -1,7 +1,7 @@
 package com.example.Todo.Entity;
 
-import com.example.Todo.Enums.priority;
-import com.example.Todo.Enums.status;
+import com.example.Todo.Enums.Priority;
+import com.example.Todo.Enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,17 +26,17 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
     @NotBlank(message = "Title is required")
-    private String Title;
+    private String title;
     @NotBlank(message = "Description is required")
     private String description;
 
     @NotNull(message = "Status is required")
     @Enumerated(EnumType.STRING)
-    private status Status;
+    private Status status;
 
     @NotNull(message = "Priority is required")
     @Enumerated(EnumType.STRING)
-    private priority priority;
+    private Priority priority;
 
 
     private LocalDate dueDate;
