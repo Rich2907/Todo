@@ -1,6 +1,10 @@
 package com.example.Todo.Service;
 import com.example.Todo.Enums.Priority;
 import com.example.Todo.Enums.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
@@ -20,13 +24,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 @Service
 @AllArgsConstructor
 public class TaskService {
+    private static final Logger logger =
+            LoggerFactory.getLogger(TaskService.class);
     @Autowired
     private TaskRepository taskRepository;
 
+    @CacheEvict(value = "tasks", allEntries = true)
     public TaskResponseDto createTask(TaskRequestDTO request) {
+        logger.info("Creating new task: {}", request.getTitle());
         Task task = new Task();
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
@@ -67,10 +76,13 @@ public class TaskService {
 
         return responseDTO;
     }
-
+    @Cacheable("Tasks")
     public PaginatedTaskResponseDto getAllTasks(int page, int size, Status status, Priority priority, String search) {
+
         Pageable pageable= PageRequest.of(page, size);
         Page<Task> taskPage;
+        System.out.println("Cache Miss");
+        logger.info("Fetching all tasks");
         if( status !=null)
         {
             System.out.println(status);
@@ -129,7 +141,7 @@ public class TaskService {
         Pageresponse.setTotalPages(taskPage.getTotalPages());
 
         Pageresponse.setTotalElements(taskPage.getTotalElements());
-
+        logger.info("Total tasks fetched: {}", response.size());
         return Pageresponse;
 
 
